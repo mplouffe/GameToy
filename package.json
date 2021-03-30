@@ -1,0 +1,15 @@
+{
+  "name": "gametoy",
+  "version": "1.0.0",
+  "description": "A javascript game engine built with Web GL.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server/server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matheu Plouffe",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

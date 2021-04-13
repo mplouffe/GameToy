@@ -1,15 +1,26 @@
-const path = require('path');
-const http = require('http');
+// const path = require('path');
+// const http = require('http');
 const express = require('express');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
 
-const publicPath = path.join(__dirname, '../dist');
+const config = require('../webpack.config.js');
+const compiler = webpack(config);
+
+// const publicPath = path.join(__dirname, '../dist');
 const port = process.env.PORT || 3000;
 
 const app = express();
-const server = http.createServer(app);
+app.use(
+    webpackDevMiddleware(compiler, {
+        publicPath: config.output.publicPath,
+    })
+);
 
-app.use(express.static(publicPath));
+// const server = http.createServer(app);
 
-server.listen(port, (err) => {
+// app.use(express.static(publicPath));
+
+app.listen(port, (err) => {
     console.log(`GameToy is up on localhost:${port}`);
 });

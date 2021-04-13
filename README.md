@@ -1,7 +1,7 @@
 # GameToy
 ------------------
-A very basic JavaScript game engine using Web GL.
+A very basic JavaScript game engine using Web GL 2.
 
-Uses as few libraries as possible.
+Uses: Webpack, Express.
 
 Made with :blue_heart:

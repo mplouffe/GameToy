@@ -19,15 +19,11 @@ function main()
     var program = genProgram(gl, vertexShader, fragmentShader);
 
     var positionAttributeLocation = gl.getAttribLocation(program, "a_position");
+    var resolutionUniformLocation = gl.getUniformLocation(program, "u_resolution");
+    var colorLocation = gl.getUniformLocation(program, "u_color");
+
     var positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    var positions = [
-        0, 0,
-        0, 0.5,
-        0.7, 0
-    ];
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     var vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
@@ -37,7 +33,6 @@ function main()
     let type = gl.FLOAT;
     let normalize = false;
     let stride = 0;
-    let offset = 0;
     gl.vertexAttribPointer(positionAttributeLocation, size, type, normalize, stride, offset);
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
@@ -46,11 +41,20 @@ function main()
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     gl.useProgram(program);
-    gl.bindVertexArray(vao);
 
-    let primitiveType = gl.TRIANGLES;
-    let count = 3;
-    gl.drawArrays(primitiveType, offset, count);
+    gl.uniform2f(resolutionUniformLocation, gl.canvas.width, gl.canvas.height);
+    // gl.bindVertexArray(vao);
+
+    for (var ii = 0; ii < 50; ++ii) {
+        setRectangle(gl, randomInt(gl.canvas.width), randomInt(gl.canvas.height), randomInt(gl.canvas.width/2), randomInt(gl.canvas.height/2));
+
+        gl.uniform4f(colorLocation, Math.random(), Math.random(), Math.random(), 1);
+
+        var primitiveType = gl.TRIANGLES;
+        var offset = 0;
+        var count = 6;
+        gl.drawArrays(primitiveType, offset, count);
+    }
 }
 
 function genShader(gl, type, source) {
@@ -78,6 +82,25 @@ function genProgram(gl, vertShader, fragShader) {
 
     console.log(gl.getProgramInfoLog(program));
     gl.deleteProgram(program);
+}
+
+function setRectangle(gl, x, y, width, height) {
+    var x1 = x;
+    var x2 = x + width;
+    var y1 = y;
+    var y2 = y + height;
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+        x1, y1,
+        x2, y1,
+        x1, y2,
+        x1, y2,
+        x2, y1,
+        x2, y2,
+    ]), gl.STATIC_DRAW);
+}
+
+function randomInt(range) {
+    return Math.floor(Math.random() * range);
 }
 
 window.onload = main;
